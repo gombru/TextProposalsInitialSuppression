@@ -12,11 +12,11 @@ Region::Region()
 }
 
 
-void Region::extract_features(Mat& _lab_img, Mat& _grey_img, Mat& _gradient_magnitude, Mat& mask, bool conf[])
+void Region::extract_features(Mat& _lab_img, Mat& _grey_img, Mat& _gradient_magnitude, InputArray _fcn_heatmap, Mat& mask, bool conf[])
 {
 
   //TODO following line is not reallistic at all because the group classifier still use statistics of this features, so either we buils a classifier without them OR we calculate them allways
-  if ((!conf[1])&&(!conf[2])&&(!conf[3])&&(!conf[4])) return;
+  if ((!conf[1])&&(!conf[2])&&(!conf[3])&&(!conf[4])&&(!conf[5])) return;
 
   // Expanded box 5pix.
   Rect bbox = bbox_ + Size(10,10);
@@ -35,6 +35,12 @@ void Region::extract_features(Mat& _lab_img, Mat& _grey_img, Mat& _gradient_magn
   {
     m = mean(_grey_img(bbox_),mask(bbox_));
     intensity_mean_ = m[0];
+  }
+
+  if (conf[5] && !_fcn_heatmap.empty())
+  {
+    m = mean(_fcn_heatmap.getMat()(bbox_),mask(bbox_));
+    fcn_score_mean_ = m[0];
   }
 
   Mat tmp_mask, tmp_mask2;

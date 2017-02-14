@@ -11,6 +11,7 @@
 #define CUE_BGI      1 // Use BackGround Intensity grouping cue
 #define CUE_G        1 // Use Gradient magnitude grouping cue
 #define CUE_S        1 // Use Stroke width grouping cue
+#define CUE_FCN      1 // Use FCN score as grouping cue
 #define CHANNEL_I    0 // Use Intensity color channel
 #define CHANNEL_R    1 // Use Red color channel
 #define CHANNEL_G    1 // Use Green color channel
@@ -34,7 +35,7 @@ void ComputeRegions::operator()(Mat img, vector<HCluster> &regions_info, string 
 
     // Pipeline configuration
     bool conf_channels[4]={CHANNEL_R,CHANNEL_G,CHANNEL_B,CHANNEL_I};
-    bool conf_cues[5]={CUE_D,CUE_FGI,CUE_BGI,CUE_G,CUE_S};
+    bool conf_cues[6]={CUE_D,CUE_FGI,CUE_BGI,CUE_G,CUE_S,CUE_FCN};
 
     /* initialize random seed: */
     srand (time(NULL));
@@ -150,7 +151,7 @@ void ComputeRegions::operator()(Mat img, vector<HCluster> &regions_info, string 
             region.pixels_.push_back(Point(0,0)); //cannot swap an empty vector
             region.pixels_.swap(contours[i]);
             region.bbox_ = mser_bboxes[i];
-            region.extract_features(lab_img, grey, gradient_magnitude, mask, conf_cues);
+            region.extract_features(lab_img, grey, gradient_magnitude, heatmap, mask, conf_cues);
             max_stroke = max(max_stroke, region.stroke_mean_);
             regions.push_back(region);
         }
@@ -161,7 +162,7 @@ void ComputeRegions::operator()(Mat img, vector<HCluster> &regions_info, string 
         t_float *data = (t_float*)malloc(dim*N * sizeof(t_float));
 
         /* Single Linkage Clustering for each individual cue */
-        for (int cue=0; cue<5; cue++)
+        for (int cue=0; cue<6; cue++)
         {
 
           if (!conf_cues[cue]) continue;
@@ -187,6 +188,9 @@ void ComputeRegions::operator()(Mat img, vector<HCluster> &regions_info, string 
                 break;
               case 4:
                 data[count+2] = (t_float)regions.at(i).stroke_mean_/max_stroke;
+                break;
+              case 5:
+                data[count+2] = (t_float)regions.at(i).fcn_score_mean_/255;
                 break;
             }
             count = count+dim;

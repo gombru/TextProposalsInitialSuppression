@@ -119,7 +119,7 @@ int main( int argc, char** argv )
             region.pixels_.push_back(Point(0,0)); //cannot swap an empty vector
             region.pixels_.swap(contours[i]);
             region.bbox_ = mser_bboxes[i];
-            region.extract_features(lab_img, grey, gradient_magnitude, mask, conf_cues);
+            region.extract_features(lab_img, grey, gradient_magnitude, noArray(), mask, conf_cues);
             max_stroke = max(max_stroke, region.stroke_mean_);
             regions.push_back(region);
         }
