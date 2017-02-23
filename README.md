@@ -1,6 +1,6 @@
 USE:
 
-img2hierarchy_cnn image_path classifier_path (heatmap_path) (suppression_threshold)
+img2hierarchy image_path classifier_path (heatmap_path) (suppression_threshold)
 
 	-image path and classifier_path are mandatory
 	-If no suppression_threshold is given, 0.10 will be used
