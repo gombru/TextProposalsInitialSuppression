@@ -14,17 +14,19 @@ else
     x.read(node);
 }
 
-
+std::string xml_path("../trained_boost_groups.xml");
 
 HierarchicalClustering::HierarchicalClustering(vector<Region> &_regions): regions(_regions)
 {
 #ifndef _TRAIN_
-    boost = StatModel::load<Boost>( "/home/rgomez/projects/TextProposals-FCN/trained_boost_groups.xml");
+    boost = StatModel::load<Boost>(xml_path.c_str());
+    cout << "Classifier loaded: " << xml_path << endl;
     if( boost.empty() )
     {
-        cout << "Could not read the classifier /home/rgomez/projects/TextProposals-FCN/trained_boost_groups.xml" << endl;
+        cout << "Could not read the classifier: " << xml_path << endl;
         CV_Error(Error::StsBadArg, "Could not read the default classifier!");
     }
+    
 #endif
 }
 

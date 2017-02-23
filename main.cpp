@@ -33,7 +33,6 @@ using namespace cv;
 #define CHANNEL_B    1 // Use Blue color channel
 
 
-
 int main( int argc, char** argv )
 {
     // Params
@@ -82,7 +81,8 @@ int main( int argc, char** argv )
         channels.push_back(pyr);
       }*/
     }
-
+    int chIdCounter=0;
+    const     int maxChId=50;
     for (int c=0; c<channels.size(); c++)
     {
 
@@ -112,14 +112,12 @@ int main( int argc, char** argv )
         Mat mask = Mat::zeros(grey.size(), CV_8UC1);
         int max_stroke = 0;
         for (int i=contours.size()-1; i>=0; i--)
-	  
-        {	  	 
-	    
+        {
             Region region;
             region.pixels_.push_back(Point(0,0)); //cannot swap an empty vector
             region.pixels_.swap(contours[i]);
             region.bbox_ = mser_bboxes[i];
-            region.extract_features(lab_img, grey, gradient_magnitude, noArray(), mask, conf_cues);
+            region.extract_features(lab_img, grey, gradient_magnitude, mask, conf_cues);
             max_stroke = max(max_stroke, region.stroke_mean_);
             regions.push_back(region);
         }
@@ -165,30 +163,33 @@ int main( int argc, char** argv )
           vector<HCluster> dendrogram;
           h_clustering(data, N, dim, (unsigned char)0, (unsigned char)3, dendrogram, x_coord_mult, channels[c].size());
       
-          for (int k=0; k<dendrogram.size(); k++)
+          for (int k=0; k<dendrogram.size(); k++)//ANGUELOS!!!! k is the node id per channel /cue
           {
              int ml = 1;
              if (c>=num_channels) ml=2;// update sizes for smaller pyramid lvls
              if (c>=2*num_channels) ml=4;// update sizes for smaller pyramid lvls
 
-             cout << dendrogram[k].rect.x*ml << " " << dendrogram[k].rect.y*ml << " "
-                  << dendrogram[k].rect.width*ml << " " << dendrogram[k].rect.height*ml << " "
-                  << (float)dendrogram[k].probability*-1 << endl;
+             cout << dendrogram[k].rect.x*ml << "," << dendrogram[k].rect.y*ml << ","
+                  << dendrogram[k].rect.width*ml << "," << dendrogram[k].rect.height*ml << ","
+                  << (float)dendrogram[k].probability <<","
+		  <<chIdCounter<<","
+		  <<k * maxChId +chIdCounter<< "," 
+		  <<dendrogram[k].node1*maxChId+chIdCounter<<"," //nodeId1
+		  <<dendrogram[k].node2*maxChId+chIdCounter<<
+//","<< //nodeId2
+                   endl;
              //     << (float)dendrogram[k].nfa << endl;
              //     << (float)(k) * ((float)rand()/RAND_MAX) << endl;
              //     << (float)dendrogram[k].nfa * ((float)rand()/RAND_MAX) << endl;
              rectangle(src,Point(dendrogram[k].rect.x*ml,dendrogram[k].rect.y*ml), Point(dendrogram[k].rect.x*ml+dendrogram[k].rect.width*ml, dendrogram[k].rect.y*ml+dendrogram[k].rect.height*ml), Scalar(0,0,255));
           }
+	chIdCounter+=1;
   
-        }
+        } // end for each similarity cue
         free(data);
 
-    }
+    } /// end for eaCH CHannel
 
-    imshow("",src);
-    waitKey(-1);
+    //imshow("",src);
+    //waitKey(-1);
 }
-
-
-
-
