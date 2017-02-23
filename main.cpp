@@ -1,5 +1,3 @@
-#define _MAIN
-
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
@@ -33,8 +31,34 @@ using namespace cv;
 #define CHANNEL_B    1 // Use Blue color channel
 
 
+extern std::string xml_path;
+
 int main( int argc, char** argv )
 {
+  
+    bool INITIAL_SUPPRESSION = false;
+    if(argc < 3){
+      cout << "Minimum 2 args: image_path classifier_path (heatmap_path) (suppression_threshold)" << endl;
+      return 0;
+    }
+  
+    Mat src, img, grey, lab_img, gradient_magnitude, heatmap;
+
+    img = imread(argv[1]);
+    img.copyTo(src);
+    
+    xml_path = argv[2]; 
+    
+    double suppression_threshold = 0.1; //Set suppression threshold
+    
+    if(argc > 3){
+      INITIAL_SUPPRESSION = true;
+      if(argc > 4) suppression_threshold  = atof(argv[4]); 
+      heatmap = imread(argv[3], CV_LOAD_IMAGE_GRAYSCALE);
+      cout << "Using threshold: " << suppression_threshold << endl;
+    }
+    
+  
     // Params
     float x_coord_mult              = 0.25; // a value of 1 means rotation invariant
 
@@ -45,11 +69,7 @@ int main( int argc, char** argv )
     /* initialize random seed: */
     srand (time(NULL));
 
-    Mat src, img, grey, lab_img, gradient_magnitude;
-
-    img = imread(argv[1]);
-    img.copyTo(src);
-
+    
     int delta = 13;
     int img_area = img.cols*img.rows;
     Ptr<MSER> cv_mser = MSER::create(delta,(int)(0.00002*img_area),(int)(0.11*img_area),55,0.);
@@ -113,6 +133,35 @@ int main( int argc, char** argv )
         int max_stroke = 0;
         for (int i=contours.size()-1; i>=0; i--)
         {
+	    
+	    //INITIAL SUPPRESSION
+	    if (INITIAL_SUPPRESSION )
+	    {
+	      //Check FCN heatmap energy. Suppress region if its below a threshold
+	      Mat regionHeatMap;
+	      float energy;
+	      
+	      if (c<=num_channels) 
+	      {
+		  regionHeatMap = heatmap(mser_bboxes[i]);
+	      }
+	      
+	      else   //If the channel is from the pyramid pick the correct heatmap region  
+	      {
+		  Rect rect;
+		  rect.x = mser_bboxes[i].x * 2;
+		  rect.y = mser_bboxes[i].y * 2;
+		  rect.width = mser_bboxes[i].width * 2;
+		  rect.height = mser_bboxes[i].height * 2;
+		  regionHeatMap = heatmap(rect);		
+	      }
+	      
+	      energy = sum(regionHeatMap)[0] / (regionHeatMap.total() * 255);
+	      if(energy < suppression_threshold) continue; //Discard the region 
+	    }
+	  
+	  
+	  
             Region region;
             region.pixels_.push_back(Point(0,0)); //cannot swap an empty vector
             region.pixels_.swap(contours[i]);
