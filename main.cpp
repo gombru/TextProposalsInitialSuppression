@@ -38,7 +38,7 @@ int main( int argc, char** argv )
   
     bool INITIAL_SUPPRESSION = false;
     if(argc < 3){
-      cout << "Minimum 2 args: image_path classifier_path (heatmap_path) (suppression_threshold)" << endl;
+      cerr << "Minimum 2 args: image_path classifier_path (heatmap_path) (suppression_threshold)" << endl;
       return 0;
     }
   
@@ -55,7 +55,7 @@ int main( int argc, char** argv )
       INITIAL_SUPPRESSION = true;
       if(argc > 4) suppression_threshold  = atof(argv[4]); 
       heatmap = imread(argv[3], CV_LOAD_IMAGE_GRAYSCALE);
-      cout << "Using threshold: " << suppression_threshold << endl;
+      cerr << "Using threshold: " << suppression_threshold << endl;
     }
     
   
@@ -224,8 +224,7 @@ int main( int argc, char** argv )
 		  <<chIdCounter<<","
 		  <<k * maxChId +chIdCounter<< "," 
 		  <<dendrogram[k].node1*maxChId+chIdCounter<<"," //nodeId1
-		  <<dendrogram[k].node2*maxChId+chIdCounter<<
-//","<< //nodeId2
+		  <<dendrogram[k].node2*maxChId+chIdCounter<<",0"<< //nodeId2
                    endl;
              //     << (float)dendrogram[k].nfa << endl;
              //     << (float)(k) * ((float)rand()/RAND_MAX) << endl;

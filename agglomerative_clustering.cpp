@@ -20,10 +20,10 @@ HierarchicalClustering::HierarchicalClustering(vector<Region> &_regions): region
 {
 #ifndef _TRAIN_
     boost = StatModel::load<Boost>(xml_path.c_str());
-    cout << "Classifier loaded: " << xml_path << endl;
+    cerr << "Classifier loaded: " << xml_path << endl;
     if( boost.empty() )
     {
-        cout << "Could not read the classifier: " << xml_path << endl;
+        cerr << "Could not read the classifier: " << xml_path << endl;
         CV_Error(Error::StsBadArg, "Could not read the default classifier!");
     }
     
