@@ -221,10 +221,11 @@ int main( int argc, char** argv )
              cout << dendrogram[k].rect.x*ml << "," << dendrogram[k].rect.y*ml << ","
                   << dendrogram[k].rect.width*ml << "," << dendrogram[k].rect.height*ml << ","
                   << (float)dendrogram[k].probability <<","
+                  << dendrogram[k].nfa <<","
 		  <<chIdCounter<<","
 		  <<k * maxChId +chIdCounter<< "," 
 		  <<dendrogram[k].node1*maxChId+chIdCounter<<"," //nodeId1
-		  <<dendrogram[k].node2*maxChId+chIdCounter<<",0"<< //nodeId2
+		  <<dendrogram[k].node2*maxChId+chIdCounter<< //nodeId2
                    endl;
              //     << (float)dendrogram[k].nfa << endl;
              //     << (float)(k) * ((float)rand()/RAND_MAX) << endl;
