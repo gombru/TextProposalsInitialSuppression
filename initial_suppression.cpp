@@ -56,7 +56,7 @@ int main( int argc, char** argv )
     
     double suppression_threshold  = 0.1; //Set suppression threshold
     if(argc > 4) suppression_threshold  = atof(argv[4]); 
-    cout << "Using threshold: " << suppression_threshold << endl;
+    cerr << "Using threshold: " << suppression_threshold << endl;
     
     
     int delta = 13;
