@@ -2,7 +2,14 @@
 This is an improved version of the [TextProposals](https://github.com/lluisgomez/TextProposals) algorithm by Lluis Gomez. It uses [TextFCN](https://github.com/gombru/TextFCN) to discard non-text regions, removing false positives and increasing the alforithm efficiency.
 
 ## Publications
-This FCN was used to improve the [TextProposals](https://github.com/lluisgomez/TextProposals) algorithm by Lluis Gomez. The improved version is [available here](https://github.com/gombru/TextProposalsInitialSuppression). That lead to two publications, which you may cite if using this FCN:
+This work lead to two publications, which you may cite if using this improved TextProposals method or the TextFCN:
+
+[FAST: Facilitated and Accurate Scene Text Proposals through FCN Guided Pruning](http://www.sciencedirect.com/science/article/pii/S0167865517302982)  
+Dena Bazazian, Raul Gomez, Anguelos Nicolaou, Lluis Gomez, Dimosthenis Karatzas, Andrew D.Bagdanov.   
+Pattern Recognition Letters. 2017.
+
+[Improving Text Proposals for Scene Images with Fully Convolutional Networks](https://arxiv.org/abs/1702.05089)  
+Dena Bazazian, Raul Gomez, Anguelos Nicolaou, Lluis Gomez, Dimosthenis Karatzas and Andrew Bagdanov.  
 
 ## Usage:
 For a detailed usage explanation refeer to [TextProposals](https://github.com/lluisgomez/TextProposals) repo. This code is similar, but includes support to load heatmaps produced by TextFCN and prune regions. 
