@@ -6,10 +6,11 @@ This work lead to two publications, which you may cite if using this improved Te
 
 [FAST: Facilitated and Accurate Scene Text Proposals through FCN Guided Pruning](http://www.sciencedirect.com/science/article/pii/S0167865517302982)  
 Dena Bazazian, Raul Gomez, Anguelos Nicolaou, Lluis Gomez, Dimosthenis Karatzas, Andrew D.Bagdanov.   
-Pattern Recognition Letters. 2017.
+Pattern Recognition Letters, 2017.
 
 [Improving Text Proposals for Scene Images with Fully Convolutional Networks](https://arxiv.org/abs/1702.05089)  
 Dena Bazazian, Raul Gomez, Anguelos Nicolaou, Lluis Gomez, Dimosthenis Karatzas and Andrew Bagdanov.  
+ICPR workshop (DLPR), 2016.
 
 ## Usage:
 For a detailed usage explanation refeer to [TextProposals](https://github.com/lluisgomez/TextProposals) repo. This code is similar, but includes support to load heatmaps produced by TextFCN and prune regions. 
